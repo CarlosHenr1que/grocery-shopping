@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --passWithNoTests --runInBand --detectOpenHandles",
     "dev": "nodemon",
     "lint": "eslint"
   },
@@ -17,13 +17,16 @@
   "devDependencies": {
     "@eslint/js": "^9.25.0",
     "@types/express": "^5.0.1",
+    "@types/jest": "^29.5.14",
     "@types/node": "^22.14.1",
     "eslint": "^9.25.0",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-prettier": "^5.2.6",
     "globals": "^16.0.0",
+    "jest": "^29.7.0",
     "nodemon": "^3.1.9",
     "prettier": "3.5.3",
+    "ts-jest": "^29.3.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.30.1"
