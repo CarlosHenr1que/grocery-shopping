@@ -16,7 +16,7 @@ export class GetProductsController implements Controller {
     } catch (error) {
       return {
         statusCode: 500,
-        body: "Server error",
+        body: error,
       };
     }
   }

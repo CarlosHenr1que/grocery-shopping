@@ -1,4 +1,3 @@
-import { ProductProps } from "../../../core/entities/product";
 import { MongoHelper } from "./helpers/mongo-helper";
 import { ProductsMongoRepository } from "./mongo-products-repository";
 
@@ -36,7 +35,7 @@ describe("Products mongo repository", () => {
     const { sut } = makeSut();
     jest.spyOn(MongoHelper, "getCollection").mockReturnValueOnce({
       find: mockFind,
-    } as any);
+    } as never);
     const response = await sut.findAll();
 
     expect(response).toStrictEqual(products);

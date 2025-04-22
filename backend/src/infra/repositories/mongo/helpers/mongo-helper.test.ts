@@ -42,7 +42,7 @@ describe("MongoHelper", () => {
     sut.getCollection("collection");
 
     expect(MongoHelper.client.db().collection).toHaveBeenCalledWith(
-      "collection"
+      "collection",
     );
   });
 });

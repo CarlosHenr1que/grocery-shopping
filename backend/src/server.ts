@@ -1,4 +1,3 @@
-import express from "express";
 import { MongoHelper } from "./infra/repositories/mongo/helpers/mongo-helper";
 import app from "./interface/http/express";
 

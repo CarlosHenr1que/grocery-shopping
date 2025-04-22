@@ -21,7 +21,7 @@ export class Product {
     category: string,
     price: number,
     stock: number,
-    imageUrl: string
+    imageUrl: string,
   ) {
     this.id = id;
     this.name = name;
@@ -39,7 +39,7 @@ export class Product {
       props.category,
       props.price,
       props.stock,
-      props.imageUrl
+      props.imageUrl,
     );
   }
 }
