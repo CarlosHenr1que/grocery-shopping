@@ -17,5 +17,17 @@ export default defineConfig([
   },
   tseslint.configs.recommended,
   eslintPluginPrettierRecommended,
-  jestPlugin,
+  {
+    files: ["**/*.test.{js,ts}"],
+    plugins: {
+      jest: jestPlugin,
+    },
+    languageOptions: {
+      globals: globals.jest,
+    },
+    rules: {
+      "jest/expect-expect": "warn",
+      "jest/no-disabled-tests": "warn",
+    },
+  },
 ]);
