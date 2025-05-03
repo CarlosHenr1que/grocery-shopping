@@ -14,6 +14,9 @@ export default defineConfig([
   {
     files: ["**/*.{js,mjs,cjs,ts}"],
     languageOptions: { globals: globals.browser },
+    rules: {
+      "no-console": ["error"],
+    },
   },
   tseslint.configs.recommended,
   eslintPluginPrettierRecommended,
@@ -28,6 +31,7 @@ export default defineConfig([
     rules: {
       "jest/expect-expect": "warn",
       "jest/no-disabled-tests": "warn",
+      "no-console": "error",
     },
   },
 ]);
