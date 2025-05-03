@@ -10,10 +10,17 @@ export class AddOrderController implements Controller {
     this.addOrder = addOrder;
   }
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-    const order = await this.addOrder.execute(httpRequest.body);
-    return {
-      statusCode: 201,
-      body: order,
-    };
+    try {
+      const order = await this.addOrder.execute(httpRequest.body);
+      return {
+        statusCode: 201,
+        body: order,
+      };
+    } catch (error) {
+      return {
+        statusCode: 500,
+        body: error,
+      };
+    }
   }
 }
