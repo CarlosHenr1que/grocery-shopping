@@ -7,7 +7,6 @@ export class ProductsMongoRepository implements ProductsRepository {
 
   async findAll(): Promise<ProductProps[]> {
     const productsCollection = MongoHelper.getCollection(this.collection);
-    console.log(productsCollection.find());
     const response = await productsCollection.find({}).toArray();
     return response.map((item) => ({
       id: item._id.toString(),
@@ -17,5 +16,6 @@ export class ProductsMongoRepository implements ProductsRepository {
       stock: item.stock,
       imageUrl: item.imageUrl,
     }));
+    console.log(`aaa`);
   }
 }
