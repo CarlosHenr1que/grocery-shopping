@@ -5,8 +5,7 @@
   "scripts": {
     "test": "jest --passWithNoTests --runInBand --detectOpenHandles",
     "dev": "nodemon",
-    "lint": "eslint",
-    "prepare": "husky"
+    "lint": "eslint"
   },
   "keywords": [],
   "author": "",
