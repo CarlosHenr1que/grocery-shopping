@@ -16,6 +16,5 @@ export class ProductsMongoRepository implements ProductsRepository {
       stock: item.stock,
       imageUrl: item.imageUrl,
     }));
-    console.log(`aaa`);
   }
 }
