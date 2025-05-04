@@ -8,7 +8,7 @@ const makeSut = () => {
 
 const products = [
   {
-    id: "1",
+    id: "680677cd575c799fe3d861e0",
     name: "any_name",
     category: "any_category",
     price: 0.99,
@@ -20,7 +20,7 @@ const products = [
 const mockFind = jest.fn().mockReturnValue({
   toArray: jest.fn().mockResolvedValue([
     {
-      _id: { toString: () => "1" },
+      _id: { toString: () => "680677cd575c799fe3d861e0" },
       name: "any_name",
       category: "any_category",
       price: 0.99,
@@ -39,5 +39,27 @@ describe("Products mongo repository", () => {
     const response = await sut.findAll();
 
     expect(response).toStrictEqual(products);
+  });
+
+  test("should return products stock given an order", async () => {
+    const { sut } = makeSut();
+    jest.spyOn(MongoHelper, "getCollection").mockReturnValueOnce({
+      find: mockFind,
+    } as never);
+
+    const response = await sut.findStock({
+      id: "any_id",
+      userId: "any_user_id",
+      items: [
+        {
+          productId: "680677cd575c799fe3d861e0",
+          quantity: 6,
+        },
+      ],
+    });
+
+    expect(response).toStrictEqual([
+      { id: products[0].id, stock: products[0].stock },
+    ]);
   });
 });

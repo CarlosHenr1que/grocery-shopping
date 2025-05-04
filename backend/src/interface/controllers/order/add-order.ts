@@ -11,10 +11,21 @@ export class AddOrderController implements Controller {
   }
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const order = await this.addOrder.execute(httpRequest.body);
+      const orderOrError = await this.addOrder.execute(httpRequest.body);
+
+      if (orderOrError.isLeft()) {
+        return {
+          statusCode: 400,
+          body: {
+            data: orderOrError.value.stock,
+            message: orderOrError.value.error.name,
+          },
+        };
+      }
+
       return {
         statusCode: 201,
-        body: order,
+        body: orderOrError.value,
       };
     } catch (error) {
       return {

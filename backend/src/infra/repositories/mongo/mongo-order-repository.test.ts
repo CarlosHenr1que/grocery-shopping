@@ -35,4 +35,12 @@ describe("Order mongo repository", () => {
 
     expect(response).toStrictEqual(order);
   });
+
+  test("should return product stock", async () => {
+    const { sut } = makeSut();
+    jest.spyOn(MongoHelper, "getCollection").mockReturnValueOnce(mockInsertOne);
+    const response = await sut.create(order);
+
+    expect(response).toStrictEqual(order);
+  });
 });
