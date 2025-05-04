@@ -1,7 +1,5 @@
 import OrderBuilder from "../../mocks/data/order";
 import ProductBuilder from "../../mocks/data/product";
-import { OrderProps } from "../core/entities/order";
-import { Product } from "../core/entities/product";
 import { OrderMongoRepository } from "../infra/repositories/mongo/mongo-order-repository";
 import { ProductsMongoRepository } from "../infra/repositories/mongo/mongo-products-repository";
 import { AddOrder } from "./add-order";
@@ -12,17 +10,6 @@ const makeSut = () => {
   const productsRepository = new ProductsMongoRepository();
   const sut = new AddOrder(orderRepository, productsRepository);
   return { sut, orderRepository, productsRepository };
-};
-
-const order: OrderProps = {
-  id: "1",
-  userId: "1",
-  items: [
-    {
-      productId: "3",
-      quantity: 2,
-    },
-  ],
 };
 
 describe(`Add order use case`, () => {
