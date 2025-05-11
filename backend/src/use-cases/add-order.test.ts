@@ -1,7 +1,7 @@
 import OrderBuilder from "../../mocks/data/order";
 import ProductBuilder from "../../mocks/data/product";
 import { OrderMongoRepository } from "../infra/repositories/mongo/mongo-order-repository";
-import { ProductsMongoRepository } from "../infra/repositories/mongo/mongo-products-repository";
+import { ProductsMongoRepository } from "../infra/repositories/mongo/products/mongo-products-repository";
 import { AddOrder } from "./add-order";
 import { UnavailableStockError } from "./erros/unavailable-stock";
 
@@ -19,7 +19,7 @@ describe(`Add order use case`, () => {
     const productMock = new ProductBuilder().build();
     jest.spyOn(orderRepository, "create").mockResolvedValueOnce(orderMock);
     jest
-      .spyOn(productsRepository, "findStock")
+      .spyOn(productsRepository, "findAllById")
       .mockResolvedValueOnce([productMock]);
     const response = await sut.execute(orderMock);
 
@@ -37,10 +37,8 @@ describe(`Add order use case`, () => {
 
     jest.spyOn(orderRepository, "create").mockResolvedValueOnce(orderMock);
     jest
-      .spyOn(productsRepository, "findStock")
-      .mockResolvedValueOnce([
-        { id: productMock.id, stock: productMock.stock },
-      ]);
+      .spyOn(productsRepository, "findAllById")
+      .mockResolvedValueOnce([productMock]);
     const response = await sut.execute(orderMock);
 
     expect(response.value).toStrictEqual({

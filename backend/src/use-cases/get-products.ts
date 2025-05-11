@@ -1,4 +1,4 @@
-import { ProductsMongoRepository } from "../infra/repositories/mongo/mongo-products-repository";
+import { ProductsMongoRepository } from "../infra/repositories/mongo/products/mongo-products-repository";
 
 export class GetProducts {
   constructor(private productsRepository: ProductsMongoRepository) {

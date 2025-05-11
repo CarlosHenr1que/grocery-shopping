@@ -1,4 +1,3 @@
-import { Order } from "../entities/order";
 import { ProductProps } from "../entities/product";
 
 export interface ProductsStock {
@@ -7,5 +6,5 @@ export interface ProductsStock {
 }
 export default interface ProductsRepository {
   findAll(products: ProductProps): Promise<ProductProps[]>;
-  findStock(order: Order): Promise<ProductsStock[]>;
+  findAllById(ids: string[]): Promise<ProductProps[]>;
 }

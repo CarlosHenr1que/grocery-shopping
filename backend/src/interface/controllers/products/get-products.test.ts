@@ -1,5 +1,5 @@
 import { ProductProps } from "../../../core/entities/product";
-import { ProductsMongoRepository } from "../../../infra/repositories/mongo/mongo-products-repository";
+import { ProductsMongoRepository } from "../../../infra/repositories/mongo/products/mongo-products-repository";
 import { GetProducts } from "../../../use-cases/get-products";
 import { GetProductsController } from "./get-products";
 

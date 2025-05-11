@@ -1,4 +1,4 @@
-import { MongoHelper } from "./helpers/mongo-helper";
+import { MongoHelper } from "../helpers/mongo-helper";
 import { ProductsMongoRepository } from "./mongo-products-repository";
 
 const makeSut = () => {
@@ -47,19 +47,8 @@ describe("Products mongo repository", () => {
       find: mockFind,
     } as never);
 
-    const response = await sut.findStock({
-      id: "any_id",
-      userId: "any_user_id",
-      items: [
-        {
-          productId: "680677cd575c799fe3d861e0",
-          quantity: 6,
-        },
-      ],
-    });
+    const response = await sut.findAllById([]);
 
-    expect(response).toStrictEqual([
-      { id: products[0].id, stock: products[0].stock },
-    ]);
+    expect(response).toStrictEqual(products);
   });
 });

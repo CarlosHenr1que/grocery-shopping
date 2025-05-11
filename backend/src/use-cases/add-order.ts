@@ -1,12 +1,14 @@
 import { Order, OrderProps } from "../core/entities/order";
+import { ProductProps } from "../core/entities/product";
 import ProductsRepository, {
   ProductsStock,
 } from "../core/repositories/products-repository";
 import { OrderMongoRepository } from "../infra/repositories/mongo/mongo-order-repository";
 import { Either, left, right } from "../shared/either";
+import { ProductNotFoundError } from "./erros/product-not-found";
 import { UnavailableStockError } from "./erros/unavailable-stock";
 
-type Errors = UnavailableStockError;
+type Errors = UnavailableStockError | ProductNotFoundError;
 
 interface StockResponse extends ProductsStock {
   quantity: number;
@@ -21,7 +23,7 @@ export class AddOrder {
     this.productsRepository = productsRepository;
   }
 
-  private filterOutOfStock = (order: Order, stock: ProductsStock[]) => {
+  private filterOutOfStock = (order: Order, stock: ProductProps[]) => {
     const outOfStock: StockResponse[] = [];
 
     stock.forEach((item) => {
@@ -31,8 +33,9 @@ export class AddOrder {
 
       if (quantity > item.stock) {
         outOfStock.push({
-          ...item,
+          id: item.id,
           quantity,
+          stock: item.stock,
         });
       }
     });
@@ -41,11 +44,16 @@ export class AddOrder {
 
   async execute(
     props: OrderProps,
-  ): Promise<Either<{ stock: StockResponse[]; error: Errors }, OrderProps>> {
+  ): Promise<Either<{ stock?: StockResponse[]; error: Errors }, OrderProps>> {
     const order = Order.create(props);
-    const stock = await this.productsRepository.findStock(order);
+    const ids = order.items.map((item) => item.productId);
+    const products = await this.productsRepository.findAllById(ids);
 
-    const outOfStock = this.filterOutOfStock(order, stock);
+    if (products.length !== order.items.length) {
+      return left({ error: new ProductNotFoundError() });
+    }
+
+    const outOfStock = this.filterOutOfStock(order, products);
 
     if (outOfStock.length > 0) {
       return left({ stock: outOfStock, error: new UnavailableStockError() });
