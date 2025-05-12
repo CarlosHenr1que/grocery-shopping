@@ -14,7 +14,6 @@ export class AddOrderController implements Controller {
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       const orderOrError = await this.addOrder.execute(httpRequest.body);
-
       if (orderOrError.isLeft()) {
         const error = orderOrError.value.error;
         if (error instanceof UnavailableStockError) {

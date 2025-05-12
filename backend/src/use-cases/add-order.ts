@@ -1,9 +1,9 @@
 import { Order, OrderProps } from "../core/entities/order";
 import { ProductProps } from "../core/entities/product";
+import OrderRepository from "../core/repositories/order-repository";
 import ProductsRepository, {
   ProductsStock,
 } from "../core/repositories/products-repository";
-import { OrderMongoRepository } from "../infra/repositories/mongo/mongo-order-repository";
 import { Either, left, right } from "../shared/either";
 import { ProductNotFoundError } from "./erros/product-not-found";
 import { UnavailableStockError } from "./erros/unavailable-stock";
@@ -16,7 +16,7 @@ interface StockResponse extends ProductsStock {
 
 export class AddOrder {
   constructor(
-    private orderRepository: OrderMongoRepository,
+    private orderRepository: OrderRepository,
     private productsRepository: ProductsRepository,
   ) {
     this.orderRepository = orderRepository;
@@ -59,7 +59,13 @@ export class AddOrder {
       return left({ stock: outOfStock, error: new UnavailableStockError() });
     }
 
-    const created = await this.orderRepository.create(Order.create(props));
+    await this.productsRepository.updateStock(
+      order.items.map((item) => ({
+        id: item.productId,
+        quantity: item.quantity,
+      })),
+    );
+    const created = await this.orderRepository.create(order);
     return right(created);
   }
 }

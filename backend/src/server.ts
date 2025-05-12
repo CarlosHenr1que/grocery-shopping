@@ -14,4 +14,7 @@ MongoHelper.connect("mongodb://localhost:27017/grocery")
       console.log(error);
     }
   })
-  .catch(console.log);
+  .catch(() => {
+    console.log("Server could not connect to database");
+    process.exit(1);
+  });

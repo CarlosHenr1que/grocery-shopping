@@ -18,6 +18,7 @@ describe(`Add order use case`, () => {
     const { sut, orderRepository, productsRepository } = makeSut();
     const orderMock = new OrderBuilder().build();
     const productMock = new ProductBuilder().build();
+    jest.spyOn(productsRepository, "updateStock").mockResolvedValueOnce();
     jest.spyOn(orderRepository, "create").mockResolvedValueOnce(orderMock);
     jest
       .spyOn(productsRepository, "findAllById")

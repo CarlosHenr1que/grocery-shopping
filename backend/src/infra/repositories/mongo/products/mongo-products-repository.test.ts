@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { MongoHelper } from "../helpers/mongo-helper";
 import { ProductsMongoRepository } from "./mongo-products-repository";
 
@@ -30,6 +31,10 @@ const mockFind = jest.fn().mockReturnValue({
   ]),
 });
 
+const mockBulkWrite = jest.fn().mockReturnValue({
+  toArray: jest.fn().mockResolvedValue(null),
+});
+
 describe("Products mongo repository", () => {
   test("should return products", async () => {
     const { sut } = makeSut();
@@ -50,5 +55,25 @@ describe("Products mongo repository", () => {
     const response = await sut.findAllById([]);
 
     expect(response).toStrictEqual(products);
+  });
+
+  test("should update product stock with correct params", async () => {
+    const { sut } = makeSut();
+    jest.spyOn(MongoHelper, "getCollection").mockReturnValueOnce({
+      bulkWrite: mockBulkWrite,
+    } as never);
+
+    const [product] = products;
+    const items = [{ id: product.id, quantity: 2 }];
+    await sut.updateStock(items);
+
+    expect(mockBulkWrite).toHaveBeenCalledWith([
+      {
+        updateOne: {
+          filter: { _id: new ObjectId(items[0].id) },
+          update: { $inc: { stock: -items[0].quantity } },
+        },
+      },
+    ]);
   });
 });
