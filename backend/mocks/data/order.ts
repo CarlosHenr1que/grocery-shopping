@@ -7,8 +7,16 @@ export default class OrderBuilder {
     userId: "any_user_id",
     items: [
       {
-        productId: "680677cd575c799fe3d861e0",
+        id: "680677cd575c799fe3d861e0",
         quantity: 2,
+        product: {
+          id: '680677cd575c799fe3d861e0',
+          name: "any_name",
+          category: "any_category",
+          price: 1,
+          stock: 1,
+          imageUrl: "any_urlS"
+        }
       },
     ],
   });

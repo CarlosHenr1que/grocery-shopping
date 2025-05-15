@@ -1,5 +1,5 @@
-import { Order, OrderProps } from "../core/entities/order";
-import { ProductProps } from "../core/entities/product";
+import { Order } from "../core/entities/order";
+import { Product, ProductProps } from "../core/entities/product";
 import OrderRepository from "../core/repositories/order-repository";
 import ProductsRepository, {
   ProductsStock,
@@ -12,6 +12,17 @@ type Errors = UnavailableStockError | ProductNotFoundError;
 
 interface StockResponse extends ProductsStock {
   quantity: number;
+}
+
+interface Item {
+  id: string;
+  quantity: number;
+}
+
+interface OrderProps {
+  id?: string;
+  userId: string;
+  items: Item[];
 }
 
 export class AddOrder {
@@ -27,9 +38,7 @@ export class AddOrder {
     const outOfStock: StockResponse[] = [];
 
     stock.forEach((item) => {
-      const quantity = order.items.find(
-        (i) => i.productId === item.id,
-      ).quantity;
+      const quantity = order.items.find((i) => i.id === item.id)?.quantity!;
 
       if (quantity > item.stock) {
         outOfStock.push({
@@ -45,13 +54,19 @@ export class AddOrder {
   async execute(
     props: OrderProps,
   ): Promise<Either<{ stock?: StockResponse[]; error: Errors }, OrderProps>> {
-    const order = Order.create(props);
-    const ids = order.items.map((item) => item.productId);
-    const products = await this.productsRepository.findAllById(ids);
+    const ids = props.items.map((item) => item.id);
+    const products = await this.productsRepository.findAllById(ids as string[]);
 
-    if (products.length !== order.items.length) {
+    if (products.length !== props.items.length) {
       return left({ error: new ProductNotFoundError() });
     }
+
+    const order = Order.create({
+      ...props, items: props.items.map(item => {
+        const product = products.find(product => product.id === item.id)!;
+        return { ...item, product: Product.create(product) }
+      })
+    });
 
     const outOfStock = this.filterOutOfStock(order, products);
 
@@ -61,7 +76,7 @@ export class AddOrder {
 
     await this.productsRepository.updateStock(
       order.items.map((item) => ({
-        id: item.productId,
+        id: item.id!,
         quantity: item.quantity,
       })),
     );

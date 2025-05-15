@@ -1,3 +1,4 @@
+import { Order, OrderProps } from "../../../core/entities/order";
 import { MongoHelper } from "./helpers/mongo-helper";
 import { OrderMongoRepository } from "./mongo-order-repository";
 
@@ -6,17 +7,33 @@ const makeSut = () => {
   return { sut };
 };
 
-const order = {
+const order: OrderProps = {
   id: "1",
   userId: "2",
   items: [
     {
-      productId: "3",
+      id: "3",
       quantity: 2,
+      product: {
+        id: '3',
+        name: "any_name",
+        category: "any_category",
+        price: 1,
+        stock: 1,
+        imageUrl: "any_url"
+      }
     },
     {
-      productId: "2",
+      id: "2",
       quantity: 1,
+      product: {
+        id: '2',
+        name: "any_name",
+        category: "any_category",
+        price: 1,
+        stock: 1,
+        imageUrl: "any_url"
+      }
     },
   ],
 };
@@ -31,7 +48,7 @@ describe("Order mongo repository", () => {
   test("should return created order", async () => {
     const { sut } = makeSut();
     jest.spyOn(MongoHelper, "getCollection").mockReturnValueOnce(mockInsertOne);
-    const response = await sut.create(order);
+    const response = await sut.create(Order.create(order));
 
     expect(response).toStrictEqual(order);
   });
@@ -39,7 +56,7 @@ describe("Order mongo repository", () => {
   test("should return product stock", async () => {
     const { sut } = makeSut();
     jest.spyOn(MongoHelper, "getCollection").mockReturnValueOnce(mockInsertOne);
-    const response = await sut.create(order);
+    const response = await sut.create(Order.create(order));
 
     expect(response).toStrictEqual(order);
   });
