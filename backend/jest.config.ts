@@ -7,6 +7,11 @@ export default {
   testEnvironment: "node",
   coverageDirectory: ".coverage",
   collectCoverage: true,
+  collectCoverageFrom: [
+    'src/**/*.{js,ts}',
+    '!src/**/*.d.ts',
+    '!src/**/index.{js,ts}'
+  ],
   coverageReporters: ["json", "lcov", "text", "html"],
   detectOpenHandles: true,
   forceExit: true,
