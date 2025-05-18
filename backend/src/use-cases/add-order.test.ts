@@ -33,7 +33,11 @@ describe(`Add order use case`, () => {
     const productMock = new ProductBuilder().build();
     const orderMock = new OrderBuilder()
       .setItems([
-        { id: productMock.id, quantity: productMock.stock + 1, product: productMock },
+        {
+          id: productMock.id,
+          quantity: productMock.stock + 1,
+          product: productMock,
+        },
       ])
       .build();
 

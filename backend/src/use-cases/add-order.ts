@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 import { Order } from "../core/entities/order";
 import { Product, ProductProps } from "../core/entities/product";
 import OrderRepository from "../core/repositories/order-repository";
@@ -62,10 +63,11 @@ export class AddOrder {
     }
 
     const order = Order.create({
-      ...props, items: props.items.map(item => {
-        const product = products.find(product => product.id === item.id)!;
-        return { ...item, product: Product.create(product) }
-      })
+      ...props,
+      items: props.items.map((item) => {
+        const product = products.find((product) => product.id === item.id)!;
+        return { ...item, product: Product.create(product) };
+      }),
     });
 
     const outOfStock = this.filterOutOfStock(order, products);

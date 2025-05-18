@@ -14,11 +14,11 @@ export const mapToProducts = (documents: Document[]): ProductProps[] => {
 };
 
 export const mapToOrders = (documents: Document[]): OrderProps[] => {
-  return documents.map(item => ({
+  return documents.map((item) => ({
     id: item._id,
     userId: item.userId,
     items: item.items,
-  }))
-}
+  }));
+};
 
 export const toObjectID = (id: string) => new ObjectId(id);
