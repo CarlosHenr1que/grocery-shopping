@@ -1,7 +1,7 @@
-import OrderBuilder from "../../mocks/data/order";
-import { OrderMongoRepository } from "../infra/repositories/mongo/mongo-order-repository";
+import OrderBuilder from '../mocks/data/order';
+import { OrderMongoRepository } from '../infra/repositories/mongo/mongo-order-repository';
 
-import { GetOrders } from "./get-orders";
+import { GetOrders } from './get-orders';
 
 const makeSut = () => {
   const orderRepository = new OrderMongoRepository();
@@ -10,10 +10,10 @@ const makeSut = () => {
 };
 
 describe(`Get orders use case`, () => {
-  test("should return orders", async () => {
+  test('should return orders', async () => {
     const { sut, orderRepository } = makeSut();
     const orderMock = new OrderBuilder().build();
-    jest.spyOn(orderRepository, "findAll").mockResolvedValueOnce([orderMock]);
+    jest.spyOn(orderRepository, 'findAll').mockResolvedValueOnce([orderMock]);
     const response = await sut.execute();
     expect(response).toStrictEqual([orderMock]);
   });
