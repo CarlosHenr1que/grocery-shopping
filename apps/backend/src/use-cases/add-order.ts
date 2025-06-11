@@ -10,7 +10,7 @@ import { UnavailableStockError } from './erros/unavailable-stock';
 
 type Errors = UnavailableStockError | ProductNotFoundError;
 
-interface StockResponse extends ProductsStock {
+export interface StockResponse extends ProductsStock {
   quantity: number;
 }
 

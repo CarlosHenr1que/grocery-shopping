@@ -77,4 +77,21 @@ describe(`Add order use case`, () => {
       error: new ProductNotFoundError(),
     });
   });
+
+  test('should throw if products length doest not match', async () => {
+    const { sut, orderRepository, productsRepository } = makeSut();
+    const orderMock = new OrderBuilder().build();
+    const productMock = new ProductBuilder().build();
+    jest.spyOn(productsRepository, 'updateStock').mockResolvedValueOnce();
+    jest.spyOn(orderRepository, 'create').mockResolvedValueOnce(orderMock);
+    jest
+      .spyOn(productsRepository, 'findAllById')
+      .mockResolvedValueOnce([productMock]);
+    const promise = sut.execute({
+      ...orderMock,
+      items: [{ ...orderMock.items[0], id: 'any' }],
+    });
+
+    await expect(promise).rejects.toThrow();
+  });
 });

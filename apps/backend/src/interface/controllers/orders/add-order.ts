@@ -1,11 +1,11 @@
-import { AddOrder } from "../../../use-cases/add-order";
-import { ProductNotFoundError } from "../../../use-cases/erros/product-not-found";
-import { UnavailableStockError } from "../../../use-cases/erros/unavailable-stock";
+import { AddOrder } from '../../../use-cases/add-order';
+import { ProductNotFoundError } from '../../../use-cases/erros/product-not-found';
+import { UnavailableStockError } from '../../../use-cases/erros/unavailable-stock';
 import {
   Controller,
   HttpRequest,
   HttpResponse,
-} from "../../adapters/express-route-adapter";
+} from '../../adapters/express-route-adapter';
 
 export class AddOrderController implements Controller {
   constructor(private readonly addOrder: AddOrder) {
@@ -43,7 +43,7 @@ export class AddOrderController implements Controller {
     } catch (error) {
       return {
         statusCode: 500,
-        body: error,
+        body: (error as Error).message,
       };
     }
   }
