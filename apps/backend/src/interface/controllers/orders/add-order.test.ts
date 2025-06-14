@@ -86,7 +86,6 @@ describe('Add order controller', () => {
     const error = new Error('error');
     jest.spyOn(addOrder, 'execute').mockRejectedValue(error);
     const response = await sut.handle({});
-    console.log({ response });
     expect(response).toStrictEqual({
       statusCode: 500,
       body: error.message,
