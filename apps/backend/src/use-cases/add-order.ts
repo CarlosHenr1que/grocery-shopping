@@ -7,6 +7,7 @@ import ProductsRepository, {
 import { Either, left, right } from '../shared/either';
 import { ProductNotFoundError } from './erros/product-not-found';
 import { UnavailableStockError } from './erros/unavailable-stock';
+import { socketServer } from '../interface/http/socket';
 
 type Errors = UnavailableStockError | ProductNotFoundError;
 
@@ -86,7 +87,14 @@ export class AddOrder {
         quantity: item.quantity,
       }))
     );
+
     const created = await this.orderRepository.create(order);
+
+    socketServer.getIO().emit('order_received', {
+      order: created,
+      timestamp: new Date().toISOString(),
+    });
+
     return right(created);
   }
 }

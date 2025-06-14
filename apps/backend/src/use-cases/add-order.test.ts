@@ -5,6 +5,15 @@ import { ProductsMongoRepository } from '../infra/repositories/mongo/products/mo
 import { AddOrder } from './add-order';
 import { ProductNotFoundError } from './erros/product-not-found';
 import { UnavailableStockError } from './erros/unavailable-stock';
+import { socketServer } from '../interface/http/socket';
+
+jest.mock('../interface/http/socket', () => ({
+  socketServer: {
+    getIO: jest.fn().mockReturnValue({
+      emit: jest.fn(),
+    }),
+  },
+}));
 
 const makeSut = () => {
   const orderRepository = new OrderMongoRepository();
@@ -14,18 +23,28 @@ const makeSut = () => {
 };
 
 describe(`Add order use case`, () => {
-  test('should create an order given proper attributes ', async () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('should create an order given proper attributes and emit socket event', async () => {
     const { sut, orderRepository, productsRepository } = makeSut();
     const orderMock = new OrderBuilder().build();
     const productMock = new ProductBuilder().build();
+
     jest.spyOn(productsRepository, 'updateStock').mockResolvedValueOnce();
     jest.spyOn(orderRepository, 'create').mockResolvedValueOnce(orderMock);
     jest
       .spyOn(productsRepository, 'findAllById')
       .mockResolvedValueOnce([productMock]);
+
     const response = await sut.execute(orderMock);
 
     expect(response.value).toStrictEqual(orderMock);
+    expect(socketServer.getIO().emit).toHaveBeenCalledWith('order_received', {
+      order: orderMock,
+      timestamp: expect.any(String),
+    });
   });
 
   test('should return unavailable stock given a order with out of stock product', async () => {
@@ -45,6 +64,7 @@ describe(`Add order use case`, () => {
     jest
       .spyOn(productsRepository, 'findAllById')
       .mockResolvedValueOnce([productMock]);
+
     const response = await sut.execute(orderMock);
 
     expect(response.value).toStrictEqual({
@@ -57,6 +77,7 @@ describe(`Add order use case`, () => {
         },
       ],
     });
+    expect(socketServer.getIO().emit).not.toHaveBeenCalled();
   });
 
   test('should return product not found error when given product does not exist', async () => {
@@ -76,22 +97,26 @@ describe(`Add order use case`, () => {
     expect(response.value).toStrictEqual({
       error: new ProductNotFoundError(),
     });
+    expect(socketServer.getIO().emit).not.toHaveBeenCalled();
   });
 
   test('should throw if products length doest not match', async () => {
     const { sut, orderRepository, productsRepository } = makeSut();
     const orderMock = new OrderBuilder().build();
     const productMock = new ProductBuilder().build();
+
     jest.spyOn(productsRepository, 'updateStock').mockResolvedValueOnce();
     jest.spyOn(orderRepository, 'create').mockResolvedValueOnce(orderMock);
     jest
       .spyOn(productsRepository, 'findAllById')
       .mockResolvedValueOnce([productMock]);
+
     const promise = sut.execute({
       ...orderMock,
       items: [{ ...orderMock.items[0], id: 'any' }],
     });
 
     await expect(promise).rejects.toThrow();
+    expect(socketServer.getIO().emit).not.toHaveBeenCalled();
   });
 });
