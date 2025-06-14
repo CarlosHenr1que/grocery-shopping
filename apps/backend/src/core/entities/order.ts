@@ -1,6 +1,6 @@
-import { Product } from "./product";
+import { Product } from './product';
 
-interface Item {
+export interface Item {
   id: string;
   quantity: number;
   product: Product;

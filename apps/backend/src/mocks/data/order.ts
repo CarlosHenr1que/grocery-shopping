@@ -1,4 +1,4 @@
-import { Order } from '../../../src/core/entities/order';
+import { Order, OrderProps, Item } from '../../../src/core/entities/order';
 
 export default class OrderBuilder {
   private order: Order = Order.create({
@@ -20,11 +20,11 @@ export default class OrderBuilder {
     ],
   });
 
-  private update(props: any) {
+  private update(props: Partial<OrderProps>) {
     return Order.create({ ...this.order, ...props });
   }
 
-  public setItems(items: any[]) {
+  public setItems(items: Item[]) {
     this.order = this.update({ ...this.order, items });
     return this;
   }
