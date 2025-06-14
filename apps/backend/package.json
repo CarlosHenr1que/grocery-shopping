@@ -74,5 +74,8 @@
         "command": "docker build -f apps/backend/Dockerfile . -t grocery-shopping-backend"
       }
     }
+  },
+  "dependencies": {
+    "socket.io": "^4.8.1"
   }
 }
