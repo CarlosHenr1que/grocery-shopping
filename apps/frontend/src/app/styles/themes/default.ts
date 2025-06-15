@@ -4,7 +4,7 @@ export default {
     background: '#F5F8F7',
     surface: '#FFFFFF',
     textPrimary: '#000000',
-    textSecondary: '#4A4A4A',
+    textSecondary: '#9E9E9E',
   },
   spacing: {
     xs: '4px',
@@ -16,7 +16,7 @@ export default {
   borderRadius: {
     sm: '8px',
     md: '12px',
-    lg: '16px',
+    lg: '20px',
     full: '9999px',
   },
   typography: {
