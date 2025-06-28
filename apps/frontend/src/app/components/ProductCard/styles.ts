@@ -37,7 +37,7 @@ export const Card = styled.div`
 `;
 
 interface ButtonContainerProps {
-  inCart: boolean;
+  $inCart: boolean;
 }
 
 export const ButtonContainer = styled.div<ButtonContainerProps>`
@@ -46,7 +46,7 @@ export const ButtonContainer = styled.div<ButtonContainerProps>`
   height: 38px;
   background-color: ${(props) => props.theme.colors.primary};
   border-radius: ${(props) => props.theme.borderRadius.lg};
-  justify-content: ${(props) => (props.inCart ? 'space-between' : 'center')};
+  justify-content: ${(props) => (props.$inCart ? 'space-between' : 'center')};
   align-items: center;
   padding: 2px;
   margin-top: ${(props) => props.theme.spacing.sm};

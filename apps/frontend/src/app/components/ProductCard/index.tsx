@@ -3,7 +3,7 @@ import { Product } from '../../models/Product';
 import * as S from './styles';
 import { MdRemove, MdAdd } from 'react-icons/md';
 
-interface Props {
+export interface Props {
   product: Product;
   quantity: number;
   inCart: boolean;
@@ -23,7 +23,7 @@ const Content = React.memo(({ product }: { product: Props['product'] }) => {
 
 export const ProductCard = ({
   product,
-  quantity = 0,
+  quantity,
   inCart,
   onAddClick,
   onRemoveClick,
@@ -31,16 +31,22 @@ export const ProductCard = ({
   return (
     <S.Container data-testid="product-card">
       <Content product={product} />
-      <S.ButtonContainer inCart={inCart}>
+      <S.ButtonContainer $inCart={inCart}>
         {inCart && (
           <>
-            <S.RoundButton onClick={() => onRemoveClick(product.id)}>
+            <S.RoundButton
+              data-testid="product-card-remove-button"
+              onClick={() => onRemoveClick(product.id)}
+            >
               <MdRemove />
             </S.RoundButton>
             <S.RoundButton>{quantity}</S.RoundButton>
           </>
         )}
-        <S.RoundButton onClick={() => onAddClick(product.id)}>
+        <S.RoundButton
+          data-testid="product-card-add-button"
+          onClick={() => onAddClick(product.id)}
+        >
           <MdAdd />
         </S.RoundButton>
       </S.ButtonContainer>
