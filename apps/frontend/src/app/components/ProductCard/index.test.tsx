@@ -87,7 +87,7 @@ describe('ProductCard component', () => {
   it('should not render image if imageUrl is empty', () => {
     renderProductCard({
       ...props,
-      product: { ...props.product, imageUrl: '' },
+      product: { ...props.product, imageUrl: ' ' },
     });
 
     expect(screen.queryByRole('img', { name: props.product.name })).toBeNull();
