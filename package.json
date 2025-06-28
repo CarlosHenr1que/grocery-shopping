@@ -2,7 +2,10 @@
   "name": "@grocery-shopping/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "test:frontend:e2e": "npx nx run @grocery-shopping/frontend-e2e:e2e",
+    "cypress": "npx nx run @grocery-shopping/frontend-e2e:open-cypress"
+  },
   "private": true,
   "dependencies": {
     "axios": "^1.10.0",
