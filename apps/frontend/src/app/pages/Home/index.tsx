@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { ProductCard } from '../../components/ProductCard';
 import { Product } from '../../models/Product';
 import * as S from './styles';
+import { Selection } from '../../components/Selection';
+import { useCartState } from '../../state/cart/cart-slice';
 
 const getProducts = async (): Promise<Product[]> => {
   const response = await fetch('http://10.10.11.13:3001/products', {
@@ -14,40 +16,14 @@ const getProducts = async (): Promise<Product[]> => {
 
 export const Home = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [cart, setCart] = useState<Map<string, { quantity: number }>>(
-    new Map()
-  );
+  const { cartItems, addCartItem, removeCartItem } = useCartState();
 
   const onAddProduct = (id: string) => {
-    setCart((prevCart) => {
-      const newCart = new Map(prevCart);
-      const existingItem = newCart.get(id) ?? { quantity: 0 };
-
-      newCart.set(id, {
-        quantity: existingItem.quantity + 1,
-      });
-
-      return newCart;
-    });
+    addCartItem(id);
   };
 
   const onRemoveProduct = (id: string) => {
-    setCart((prevCart) => {
-      const newCart = new Map(prevCart);
-      const existingItem = newCart.get(id);
-
-      if (existingItem) {
-        if (existingItem.quantity <= 1) {
-          newCart.delete(id);
-        } else {
-          newCart.set(id, {
-            quantity: existingItem.quantity - 1,
-          });
-        }
-      }
-
-      return newCart;
-    });
+    removeCartItem(id);
   };
 
   useEffect(() => {
@@ -60,9 +36,16 @@ export const Home = () => {
 
   return (
     <S.Container>
+      <Selection
+        text="All categories"
+        active
+        onClick={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
       <S.Grid>
         {products.map((product) => {
-          const quantity = cart.get(product.id)?.quantity ?? 0;
+          const quantity = cartItems.get(product.id)?.quantity ?? 0;
           return (
             <ProductCard
               product={product}
