@@ -2,6 +2,11 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   display: flex;
+  flex-direction: column;
+  padding-top: ${(props) => props.theme.spacing.xl};
+  @media (max-width: 600px) {
+    padding-inline: 8px;
+  }
 `;
 
 export const Grid = styled.div`
