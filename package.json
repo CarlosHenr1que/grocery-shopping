@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "start:frontend:dev": "npx nx run @grocery-shopping/frontend:dev",
+    "start:backend:dev": "npx nx run @grocery-shopping/backend:serve",
     "test:frontend:e2e": "npx nx run @grocery-shopping/frontend-e2e:e2e",
     "cypress": "npx nx run @grocery-shopping/frontend-e2e:open-cypress"
   },
@@ -19,7 +21,8 @@
     "react-is": "19.0.0",
     "react-router-dom": "6.29.0",
     "styled-components": "6.0.0",
-    "zod": "^3.25.56"
+    "zod": "^3.25.56",
+    "zustand": "^5.0.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",
