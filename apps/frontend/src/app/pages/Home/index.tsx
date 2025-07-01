@@ -4,15 +4,7 @@ import { Product } from '../../models/Product';
 import * as S from './styles';
 import { Selection } from '../../components/Selection';
 import { useCartState } from '../../state/cart/cart-slice';
-
-const getProducts = async (): Promise<Product[]> => {
-  const response = await fetch('http://10.10.11.13:3001/products', {
-    method: 'get',
-  });
-
-  const products = await response.json();
-  return products;
-};
+import { getProductsRequest } from '../../services';
 
 export const Home = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -28,8 +20,10 @@ export const Home = () => {
 
   useEffect(() => {
     const handleGetProducts = async () => {
-      const productsResponse = await getProducts();
-      setProducts(productsResponse);
+      const productsResponse = await getProductsRequest();
+      if (productsResponse) {
+        setProducts(productsResponse);
+      }
     };
     handleGetProducts();
   }, []);
