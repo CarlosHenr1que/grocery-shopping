@@ -7,7 +7,7 @@ export const Header = () => {
   const { cartItems } = useCartState();
 
   return (
-    <S.Container>
+    <S.Container data-testid="header">
       <S.InputWrapper>
         <MdMenu size={22} color="#fff" data-testid="menu-icon" />
         <Input placeholder="Search for vegetables, fruits or meat." />
