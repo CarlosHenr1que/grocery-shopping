@@ -14,5 +14,6 @@ export default defineConfig({
       ciBaseUrl: 'http://localhost:4300',
     }),
     baseUrl: 'http://localhost:4200',
+    testIsolation: false,
   },
 });
