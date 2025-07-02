@@ -7,6 +7,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      docker:
+        image: docker:20.10.16
+        options: --privileged
 
     steps:
       - name: Checkout code
@@ -20,5 +24,21 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Build backend with NX
+        run: npx nx build backend
+
+      - name: Start backend and database with docker-compose
+        run: |
+          docker-compose up -d
+          echo "Waiting for services to start..."
+          sleep 15
+
       - name: Run all tests
         run: npx nx run-many --target=test --all --parallel
+
+      - name: Run frontend E2E tests
+        run: npx nx run @grocery-shopping/frontend-e2e:e2e
+
+      - name: Tear down docker-compose services
+        if: always()
+        run: docker-compose down -v
