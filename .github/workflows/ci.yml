@@ -38,6 +38,25 @@ jobs:
           echo "Waiting for services to start..."
           sleep 15
 
+      - name: Seed database
+        run: |
+          docker exec -i grocery-database mongosh grocery --eval '
+          db.products.insertMany([
+            {
+              name: "Banana",
+              imageUrl: "https://upload.wikimedia.org/wikipedia/commons/6/69/Banana.png",
+              price: 0.5,
+              stock: 100
+            },
+            {
+              name: "Apple",
+              imageUrl: "https://pngfre.com/wp-content/uploads/apple-43-300x297.png",
+              price: 0.7,
+              stock: 80
+            }
+          ]);
+          '
+
       - name: Run all tests
         run: npx nx run-many --target=test --all --parallel
 
