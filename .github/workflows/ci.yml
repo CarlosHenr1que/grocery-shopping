@@ -7,10 +7,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    services:
-      docker:
-        image: docker:20.10.16
-        options: --privileged
 
     steps:
       - name: Checkout code
@@ -24,8 +20,17 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Install Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.6/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose version
+
       - name: Build backend with NX
         run: npx nx build backend
+
+      - name: Build backend Docker image
+        run: docker-compose build backend
 
       - name: Start backend and database with docker-compose
         run: |
@@ -37,7 +42,7 @@ jobs:
         run: npx nx run-many --target=test --all --parallel
 
       - name: Run frontend E2E tests
-        run: npx nx run @grocery-shopping/frontend-e2e:e2e
+        run: npx nx e2e frontend-e2e
 
       - name: Tear down docker-compose services
         if: always()
