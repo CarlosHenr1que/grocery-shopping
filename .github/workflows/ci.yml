@@ -27,8 +27,8 @@ jobs:
         env:
           PORT: 3001
           DATABASE_URL: mongodb://localhost:27017/grocery
-      - name: Start backend server
-        run: node apps/backend/dist/main.js &
+        run: |
+          node apps/backend/dist/main.js > backend.log 2>&1 &
 
       - name: Wait for backend to be ready
         run: |
