@@ -1,0 +1,25 @@
+services:
+  mongo:
+    image: mongo:6
+    container_name: grocery-database
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  backend:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    container_name: grocery-backend
+    ports:
+      - "3001:3001"
+    environment:
+      - DATABASE_URL=mongodb://mongo:27017/grocery
+      - PORT=3001
+    depends_on:
+      - mongo
+
+volumes:
+  mongo-data:

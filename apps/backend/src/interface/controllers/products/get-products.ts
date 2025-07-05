@@ -1,5 +1,5 @@
-import { GetProducts } from "../../../use-cases/get-products";
-import { Controller } from "../../adapters/express-route-adapter";
+import { GetProducts } from '../../../use-cases/get-products';
+import { Controller } from '../../adapters/express-route-adapter';
 
 export class GetProductsController implements Controller {
   constructor(private getProducts: GetProducts) {

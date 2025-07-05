@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 
 export interface HttpResponse {
   statusCode: number;
